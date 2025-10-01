@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Genre;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class GenreController extends Controller
 {
@@ -12,7 +13,8 @@ class GenreController extends Controller
      */
     public function index()
     {
-        //
+          $genre = Genre::all();
+        return response() -> json($genre ,200);
     }
 
     /**
@@ -28,7 +30,21 @@ class GenreController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validate = $request->validate(
+            [
+                'nama' => 'required|unique:genre',
+                'kode' => 'required|'
+
+            ]
+        );
+
+        $genre = Genre::create($validate);
+        if($genre){
+            $data['success'] = true;
+            $data['message'] = "Genre berhasil disimpan";
+            $data['data'] = $genre;
+            return response()->json($data, 201);
+        }
     }
 
     /**
@@ -52,7 +68,24 @@ class GenreController extends Controller
      */
     public function update(Request $request, Genre $genre)
     {
-        //
+         $genre = Genre::find($id);
+        if($genre){
+            $validate = $request->validate(
+                [
+                    'nama' => 'required',
+                    'kode' => 'required'
+
+                ]
+        );     
+        Genre::where('id' , $id)->update($validate);
+            $genre = Genre::find($id);
+            if ($genre){
+            $data['success'] = true;
+            $data['message'] = "Genre berhasil disimpan";
+            $data['data'] = $genre;
+            return response()->json($data, 201);
+            }
+        }
     }
 
     /**
@@ -60,6 +93,16 @@ class GenreController extends Controller
      */
     public function destroy(Genre $genre)
     {
-        //
+        $genre = Genre::where('id', $id);
+        if($genre) {
+            $genre->delete();
+            $data['success'] = true;
+            $data['message'] = "Genre berhasil dihapus";
+            return response()->json($data, Response::HTTP_OK);
+        }else {
+            $data['success'] = true;
+            $data['message'] = "Genre tidak ditemukan";
+            return response()->json($data, Response::HTTP_NOT_FOUND);
+        }
     }
 }

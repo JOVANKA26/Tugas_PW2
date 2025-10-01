@@ -6,5 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Genre extends Model
 {
-    //
+    protected $fillable = ['nama', 'kode'];
+    public function judul(){
+        return $this->hasMany(Judul::class);
+    }
 }

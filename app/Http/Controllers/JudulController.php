@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Judul;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class JudulController extends Controller
 {
@@ -12,7 +13,7 @@ class JudulController extends Controller
      */
     public function index()
     {
-          $judul = Judul::all();
+        $judul = Judul::with('genre')-> get();
         return response() -> json($judul ,200);
     }
 
@@ -31,18 +32,24 @@ class JudulController extends Controller
     {
         $validate = $request->validate(
             [
-                'nama' => 'required|unique:fakultas',
-                'kode' => 'required'
-
+                'nama'      => 'required|unique:fakultas',
+                'kode'      => 'required'
+                'genre_id' => 'required|exists:genre,id',
             ]
         );
 
         $judul = Judul::create($validate);
-        if($judul){
-            $data['success'] = true;
-            $data['message'] = "Judul berhasil disimpan";
-            $data['data'] = $judul;
-            return response()->json($data, 201);
+        if ($judul) {
+        return response()->json([
+            'success' => true,
+            'message' => "Judul berhasil disimpan",
+            'data'    => $judul
+        ], 201);
+        } else {
+        return response()->json([
+            'success' => false,
+            'message' => "Judul gagal disimpan"
+        ], 500);
         }
     }
 
@@ -67,26 +74,7 @@ class JudulController extends Controller
      */
     public function update(Request $request, Judul $judul)
     {
-        $judul = Judul::find($id);
-        if($judul){
-            $validate = $request->validate(
-                [
-                    'nama' => 'required',
-                    'kode' => 'required'
-
-                ]
-        );
-                //update data fakultas
-        Judul::where('id' , $id)->update($validate);
-            //Mengambil data fakulatas yang sudah diperbarui
-            $judul = Judul::find($id);
-            if ($judul){
-            $data['success'] = true;
-            $data['message'] = "Judul berhasil disimpan";
-            $data['data'] = $judul;
-            return response()->json($data, 201);
-            }
-        }
+       //
     }
 
     /**
@@ -94,6 +82,16 @@ class JudulController extends Controller
      */
     public function destroy(Judul $judul)
     {
-        //
+         $judul = Judul::where('id', $id);
+        if($judul) {
+            $judul->delete();
+            $data['success'] = true;
+            $data['message'] = "Judul berhasil dihapus";
+            return response()->json($data, Response::HTTP_OK);
+        }else {
+            $data['success'] = true;
+            $data['message'] = "Judul tidak ditemukan";
+            return response()->json($data, Response::HTTP_NOT_FOUND);
+        }
     }
 }
