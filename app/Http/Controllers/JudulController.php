@@ -12,7 +12,8 @@ class JudulController extends Controller
      */
     public function index()
     {
-        //
+          $judul = Judul::all();
+        return response() -> json($judul ,200);
     }
 
     /**
@@ -28,7 +29,21 @@ class JudulController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validate = $request->validate(
+            [
+                'nama' => 'required|unique:fakultas',
+                'kode' => 'required'
+
+            ]
+        );
+
+        $judul = Judul::create($validate);
+        if($judul){
+            $data['success'] = true;
+            $data['message'] = "Judul berhasil disimpan";
+            $data['data'] = $judul;
+            return response()->json($data, 201);
+        }
     }
 
     /**
@@ -52,7 +67,26 @@ class JudulController extends Controller
      */
     public function update(Request $request, Judul $judul)
     {
-        //
+        $judul = Judul::find($id);
+        if($judul){
+            $validate = $request->validate(
+                [
+                    'nama' => 'required',
+                    'kode' => 'required'
+
+                ]
+        );
+                //update data fakultas
+        Judul::where('id' , $id)->update($validate);
+            //Mengambil data fakulatas yang sudah diperbarui
+            $judul = Judul::find($id);
+            if ($judul){
+            $data['success'] = true;
+            $data['message'] = "Judul berhasil disimpan";
+            $data['data'] = $judul;
+            return response()->json($data, 201);
+            }
+        }
     }
 
     /**
