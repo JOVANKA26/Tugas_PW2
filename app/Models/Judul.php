@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Judul extends Model
 {
     protected $fillable = ['nama', 'kode', ];
-    public function Judul(){
-        return $this->hasMany(Genre::class);
+    public function genre(){
+        return $this->belongsTo(Genre::class);
     }
 }

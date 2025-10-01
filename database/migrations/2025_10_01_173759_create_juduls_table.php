@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nama', 100);
             $table->char('kode', 4);
-            $table->foreignId('genres_id')->constrained();
+            $table->foreignId('genre_id')->constrained();
             $table->timestamps();
         });
     }
