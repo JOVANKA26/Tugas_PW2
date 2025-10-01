@@ -33,7 +33,7 @@ class JudulController extends Controller
         $validate = $request->validate(
             [
                 'nama'      => 'required|unique:fakultas',
-                'kode'      => 'required'
+                'kode'      => 'required',
                 'genre_id' => 'required|exists:genre,id',
             ]
         );
