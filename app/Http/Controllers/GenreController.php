@@ -32,7 +32,7 @@ class GenreController extends Controller
     {
         $validate = $request->validate(
             [
-                'nama' => 'required|unique:genre',
+                'nama' => 'required|unique:genres',
                 'kode' => 'required|'
 
             ]
@@ -52,7 +52,13 @@ class GenreController extends Controller
      */
     public function show(Genre $genre)
     {
-        //
+        $validate = $request->validate(
+            [
+                'nama' => 'required|unique:genre',
+                'kode' => 'required|'
+
+            ]
+        );
     }
 
     /**
@@ -66,7 +72,7 @@ class GenreController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Genre $genre)
+    public function update(Request $request, Genre $id)
     {
          $genre = Genre::find($id);
         if($genre){
@@ -81,7 +87,7 @@ class GenreController extends Controller
             $genre = Genre::find($id);
             if ($genre){
             $data['success'] = true;
-            $data['message'] = "Genre berhasil disimpan";
+            $data['message'] = "Genre berhasil diupdate";
             $data['data'] = $genre;
             return response()->json($data, 201);
             }
@@ -91,7 +97,7 @@ class GenreController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Genre $genre)
+    public function destroy(Genre $id)
     {
         $genre = Genre::where('id', $id);
         if($genre) {

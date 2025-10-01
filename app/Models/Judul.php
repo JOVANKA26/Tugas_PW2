@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Judul extends Model
 {
-    protected $fillable = ['nama', 'kode'];
-    public function prodi(){
+    protected $fillable = ['nama', 'kode', ];
+    public function Judul(){
         return $this->hasMany(Genre::class);
     }
 }

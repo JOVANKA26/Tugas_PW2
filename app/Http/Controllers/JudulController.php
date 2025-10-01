@@ -32,7 +32,7 @@ class JudulController extends Controller
     {
         $validate = $request->validate(
             [
-                'nama'      => 'required|unique:fakultas',
+                'nama'      => 'required|unique:juduls',
                 'kode'      => 'required',
                 'genre_id' => 'required|exists:genre,id',
             ]
@@ -58,7 +58,13 @@ class JudulController extends Controller
      */
     public function show(Judul $judul)
     {
-        //
+        $validate = $request->validate(
+            [
+                'nama'      => 'required|unique:judul',
+                'kode'      => 'required',
+                'genre_id' => 'required|exists:genres,id',
+            ]
+        );
     }
 
     /**
@@ -74,7 +80,25 @@ class JudulController extends Controller
      */
     public function update(Request $request, Judul $judul)
     {
-       //
+        $genre = Genre::find($id);
+        if($genre){
+            $validate = $request->validate(
+            [
+                'nama'      => 'required|unique:judul',
+                'kode'      => 'required',
+                'genre_id'  => 'required|exists:genre,id',
+
+            ]
+        );     
+        Genre::where('id' , $id)->update($validate);
+            $genre = Genre::find($id);
+            if ($genre){
+            $data['success'] = true;
+            $data['message'] = "Judul berhasil disimpan";
+            $data['data'] = $genre;
+            return response()->json($data, 201);
+            }
+        }
     }
 
     /**
