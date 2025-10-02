@@ -10,6 +10,7 @@ use App\Models\Genre;
 
 use Illuminate\Container\Attributes\Auth;
 use Illuminate\Http\Response;
+use App\Http\Controllers\AuthController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
