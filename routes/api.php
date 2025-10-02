@@ -29,7 +29,4 @@ Route::delete('/genre/{id}', [GenreController::class,'destroy']);
 Route::delete('/judul/{id}', [JudulController::class,'destroy']);
 
 Route::post('/register', [AuthController::class,'register']);
-Route::post('login', [AuthController::class, 'login']);
-
-Route::apiResource('genre', GenreController::class);
-Route::apiResource('judul', GenreController::class);
+Route::post('/login', [AuthController::class, 'login']);
