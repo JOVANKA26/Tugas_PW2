@@ -31,3 +31,4 @@ Route::post('/register', [AuthController::class,'register']);
 Route::post('login', [AuthController::class, 'login']);
 
 Route::apiResource('genre', GenreController::class);
+Route::apiResource('judul', GenreController::class);
